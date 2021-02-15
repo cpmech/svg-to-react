@@ -16,10 +16,17 @@ const main = async () => {
       message: 'What is the "output" directory?',
       initial: '/tmp/svg-to-react/svgs',
     },
+    {
+      type: 'confirm',
+      name: 'storybook',
+      message: 'Generate Storybook?',
+      initial: false,
+    },
   ]);
 
   const inputDir = (response as any).inputDir as string;
   const outputDir = (response as any).outputDir as string;
+  const storybook = (response as any).storybook as boolean;
 
   if (!fs.existsSync(inputDir)) {
     console.log('😟 Input directory does not exist');
@@ -51,7 +58,7 @@ const main = async () => {
   }
 
   console.log('🚀 Processing SVG files');
-  await runAll(inputDir, outputDir);
+  await runAll(inputDir, outputDir, storybook);
 
   console.log('😀 DONE');
 };
