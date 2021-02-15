@@ -3,8 +3,6 @@ import Enquirer from 'enquirer';
 import { runAll } from './runAll';
 
 const main = async () => {
-  console.log('hello');
-
   const response = await Enquirer.prompt([
     {
       type: 'input',
@@ -16,30 +14,40 @@ const main = async () => {
       type: 'input',
       name: 'outputDir',
       message: 'What is the "output" directory?',
-      initial: '/tmp/svg-to-react',
+      initial: '/tmp/svg-to-react/svgs',
     },
   ]);
 
-  const { inputDir, outputDir } = response as any;
+  const inputDir = (response as any).inputDir as string;
+  const outputDir = (response as any).outputDir as string;
 
   if (!fs.existsSync(inputDir)) {
     console.log('😟 Input directory does not exist');
     return;
   }
 
-  if (!fs.existsSync(outputDir)) {
-    console.log('😟 Output directory does not exist');
+  if (!outputDir) {
+    console.log('😟 Name of output directory must be given');
+    return;
+  }
+
+  if (!outputDir.startsWith('/tmp/svg-to-react')) {
+    console.log('😟 We can only work with directories starting with "/tmp/svg-to-react"');
     return;
   }
 
   const confirmObject = new (Enquirer as any).Confirm({
-    message: 'Rewrite files in the output directory? ️⚠️ ',
+    message: 'Delete existent output directory? ️⚠️ ',
   });
 
   const confirm = await confirmObject.run();
   if (!confirm) {
     console.log('👍 ok, bye');
     return;
+  }
+
+  if (fs.existsSync(outputDir)) {
+    fs.rmSync(`${outputDir}`, { recursive: true });
   }
 
   console.log('🚀 Processing SVG files');

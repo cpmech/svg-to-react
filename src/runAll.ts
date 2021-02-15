@@ -12,19 +12,19 @@ export const runAll = async (inputDir: string, outputDir: string) => {
     const svg = await optimizeSvg(filepaths[i]);
     const react = svg2react(svg);
     components[i] = react.componentName;
-    maybeWriteFile(true, `${outputDir}/svgs/${components[i]}.tsx`, () => react.code);
+    maybeWriteFile(true, `${outputDir}/${components[i]}.tsx`, () => react.code);
   }
 
   // generate and save AllSvg.stories.tsx
   const allSvgStories = genStorybook(components);
-  maybeWriteFile(true, `${outputDir}/svgs/AllSvg.stories.tsx`, () => allSvgStories);
+  maybeWriteFile(true, `${outputDir}/AllSvg.stories.tsx`, () => allSvgStories);
 
   // generate and save XSvgCollection.tsx
   const appTsx = genXSvgCollection(components);
-  maybeWriteFile(true, `${outputDir}/svgs/XSvgCollection.tsx`, () => appTsx);
+  maybeWriteFile(true, `${outputDir}/XSvgCollection.tsx`, () => appTsx);
 
   // generate and save index file
   let indexTs = `export * from './XSvgCollection.ts';\n`;
   indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, indexTs);
-  maybeWriteFile(true, `${outputDir}/svgs/index.ts`, () => indexTs);
+  maybeWriteFile(true, `${outputDir}/index.ts`, () => indexTs);
 };
