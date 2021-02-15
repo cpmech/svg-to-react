@@ -1,11 +1,11 @@
-/// <reference types="./enquirer" />
-import { Confirm, prompt } from 'enquirer';
 import fs from 'fs';
+import Enquirer from 'enquirer';
+import { runAll } from './runAll';
 
 const main = async () => {
   console.log('hello');
 
-  const response = await prompt([
+  const response = await Enquirer.prompt([
     {
       type: 'input',
       name: 'inputDir',
@@ -20,7 +20,7 @@ const main = async () => {
     },
   ]);
 
-  const { inputDir, outputDir } = response;
+  const { inputDir, outputDir } = response as any;
 
   if (!fs.existsSync(inputDir)) {
     console.log('😟 Input directory does not exist');
@@ -32,7 +32,7 @@ const main = async () => {
     return;
   }
 
-  const confirmObject = new Confirm({
+  const confirmObject = new (Enquirer as any).Confirm({
     message: 'Rewrite files in the output directory? ️⚠️ ',
   });
 
@@ -42,7 +42,10 @@ const main = async () => {
     return;
   }
 
-  console.log('🚀 Finding SVG files');
+  console.log('🚀 Processing SVG files');
+  await runAll(inputDir, outputDir);
+
+  console.log('😀 DONE');
 };
 
 (async () => {
@@ -52,6 +55,3 @@ const main = async () => {
     console.warn(error);
   }
 })();
-
-// filepath: string; // e.g ./assets/houseThreeD.svg
-// filepath: string; // e.g /tmp/svg-to-react/HouseThreeD.tsx
