@@ -1,16 +1,12 @@
-export const genSvgCollection = (components: string[]): string => {
+export const genXSvgCollection = (components: string[]): string => {
   if (components.length < 1) {
     return '';
   }
 
-  let app = `import logo from './logo.svg';
-import './SvgCollection.css';
-`;
-
-  app += components.reduce((acc, curr) => `${acc}import { ${curr} } from './components';\n`, '');
+  let app = components.reduce((acc, curr) => `${acc}import { ${curr} } from './${curr}';\n`, '');
 
   app += `
-export const SvgCollection:React.FC = () => {
+export const XSvgCollection: React.FC = () => {
   return (
     <div>
       <div style={{ marginTop: 50, width: '90%', display: 'flex', flexWrap: 'wrap' }}>

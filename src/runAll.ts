@@ -1,6 +1,6 @@
 import glob from 'glob';
 import { maybeWriteFile } from '@cpmech/basic-sys';
-import { filepath2name, genSvgCollection, genStorybook, optimizeSvg, svg2react } from './lib';
+import { filepath2name, genStorybook, genXSvgCollection, optimizeSvg, svg2react } from './lib';
 
 export const runAll = async (inputDir: string, outputDir: string) => {
   // generate and save components
@@ -8,27 +8,23 @@ export const runAll = async (inputDir: string, outputDir: string) => {
   const names = filepaths.map((fp) => filepath2name(fp));
   const components = names.map(() => '');
   for (let i = 0; i < filepaths.length; i++) {
-    console.log(`... optimizing ${names[i]}.svg`);
+    console.log(`... processing ${names[i]}`);
     const svg = await optimizeSvg(filepaths[i]);
     const react = svg2react(svg);
     components[i] = react.componentName;
-    console.log(`... writing ${components[i]} component`);
-    maybeWriteFile(true, `${outputDir}/components/${names[i]}.tsx`, () => react.code);
+    maybeWriteFile(true, `${outputDir}/svgs/${names[i]}.tsx`, () => react.code);
   }
-
-  // generate and save index.ts
-  const indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, '');
-  maybeWriteFile(true, `${outputDir}/index.ts`, () => indexTs);
-
-  // generate and save SvgCollection.tsx
-  const appTsx = genSvgCollection(components);
-  maybeWriteFile(true, `${outputDir}/App.tsx`, () => appTsx);
 
   // generate and save AllSvg.stories.tsx
   const allSvgStories = genStorybook(components);
-  maybeWriteFile(
-    true,
-    `${outputDir}/components/__stories__/AllSvg.stories.tsx`,
-    () => allSvgStories,
-  );
+  maybeWriteFile(true, `${outputDir}/svgs/AllSvg.stories.tsx`, () => allSvgStories);
+
+  // generate and save XSvgCollection.tsx
+  const appTsx = genXSvgCollection(components);
+  maybeWriteFile(true, `${outputDir}/svgs/XSvgCollection.tsx`, () => appTsx);
+
+  // generate and save index file
+  let indexTs = `export * from './XSvgCollection.ts';\n`;
+  indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, indexTs);
+  maybeWriteFile(true, `${outputDir}/svgs/index.ts`, () => indexTs);
 };
