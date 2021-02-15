@@ -32,11 +32,6 @@ export const runAll = async (
   const appTsx = genXCollection(components);
   maybeWriteFile(true, `${outputDir}/XCollection.tsx`, () => appTsx);
 
-  // generate and save index file
-  let indexTs = `export * from './XCollection';\n`;
-  indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, indexTs);
-  maybeWriteFile(true, `${outputDir}/index.ts`, () => indexTs);
-
   if (storybook) {
     // generate and save AllSvg.stories.tsx
     const allSvgStories = genStorybook(components);
