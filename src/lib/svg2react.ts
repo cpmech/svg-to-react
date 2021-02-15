@@ -1,5 +1,5 @@
 import { camelize } from '@cpmech/basic';
-import { ICode, IDims } from './types';
+import { ISvg, IReact } from './types';
 
 const problems = [
   'clip-path',
@@ -17,24 +17,19 @@ const replacements = problems.map((p) => ({
   rx: new RegExp(p, 'g'),
 }));
 
-const getSVGContent = (source: string) => source.slice(source.indexOf('>') + 1).slice(0, -6);
-
-const getReactCode = (
-  componentName: string,
-  width: string,
-  height: string,
-  svgPaths: string,
-): string => {
+export const svg2react = (svg: ISvg): IReact => {
   const data = replacements.reduce((acc, curr) => {
     return acc.replace(curr.rx, curr.to);
-  }, svgPaths);
+  }, svg.content);
 
-  return `export interface ${componentName}Props {
+  const componentName = `Svg${camelize(svg.name, true)}`;
+
+  const code = `export interface ${componentName}Props {
   size?: string; // size of square container
   style?: React.CSSProperties; // not for height or width
 }
 
-export const ${componentName}: React.FC<${componentName}Props> = ({ size = "24px", style }) => {
+export const ${componentName}: React.FC<${componentName}Props> = ({ size = '24px', style }) => {
   return (
     <div
       style={{
@@ -63,7 +58,7 @@ export const ${componentName}: React.FC<${componentName}Props> = ({ size = "24px
             left: 0,
             top: 0,
           }}
-          viewBox="0 0 ${width} ${height}"
+          viewBox="0 0 ${svg.dims.width} ${svg.dims.height}"
           xmlns="http://www.w3.org/2000/svg"
         >
           ${data}
@@ -73,13 +68,6 @@ export const ${componentName}: React.FC<${componentName}Props> = ({ size = "24px
   );
 };
 `;
-};
 
-export const genCode = (name: string, svgSource: string, dims: IDims): ICode => {
-  const filename = camelize(name);
-  const componentName = `Icon${camelize(filename, true)}`;
-  const svgPaths = getSVGContent(svgSource);
-  const code = getReactCode(componentName, dims.width, dims.height, svgPaths);
-  const filepath = `${componentName}.tsx`;
-  return { filepath, code };
+  return { componentName, code };
 };
