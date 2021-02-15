@@ -1,9 +1,9 @@
-import { genXSvgCollection } from '../genXSvgCollection';
+import { genXCollection } from '../genXCollection';
 
 const correct = String.raw`import { SvgSample1 } from './SvgSample1';
 import { SvgSample2 } from './SvgSample2';
 
-export const XSvgCollection: React.FC = () => {
+export const XCollection: React.FC = () => {
   return (
     <div>
       <div style={{ marginTop: 50, width: '90%', display: 'flex', flexWrap: 'wrap' }}>
@@ -15,9 +15,9 @@ export const XSvgCollection: React.FC = () => {
 };
 `;
 
-describe('genXSvgCollection', () => {
-  it('should generate the XSvgCollection', () => {
-    const res = genXSvgCollection(['SvgSample1', 'SvgSample2']);
+describe('genXCollection', () => {
+  it('should generate the XCollection', () => {
+    const res = genXCollection(['SvgSample1', 'SvgSample2']);
     expect(res).toBe(correct);
   });
 });
