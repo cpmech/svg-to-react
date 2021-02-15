@@ -1,14 +1,10 @@
 import fs from 'fs';
-import path from 'path';
 import SVGO from 'svgo';
 import { Iany } from '@cpmech/basic';
 import { hasSameProp } from '@cpmech/js2ts';
 import { IDims, ISvg } from './types';
 
 const svgo = new SVGO({});
-
-export const filepath2name = (filepath: string) =>
-  path.basename(filepath, path.extname(filepath)).replace(/-/g, '_');
 
 export const extractViewBox = (svg: string): string => {
   const viewBoxRegex = /<svg .*?viewBox=["'](-?[\d.]+[, ]+-?[\d.]+[, ][\d.]+[, ][\d.]+)["']/;
@@ -43,13 +39,8 @@ export const getSvgContent = (source: string) => source.slice(source.indexOf('>'
 
 export const optimizeSvg = async (filepath: string): Promise<ISvg> => {
   const data = fs.readFileSync(filepath, 'utf8');
-  const name = filepath2name(filepath);
   const res = await svgo.optimize(data, { path: filepath });
   const dims = getSvgDims(res.info, res.data);
   const content = getSvgContent(res.data);
-  return {
-    name,
-    dims,
-    content,
-  };
+  return { dims, content };
 };

@@ -1,5 +1,5 @@
 import { camelize } from '@cpmech/basic';
-import { ISvg, IReact } from './types';
+import { ISvg } from './types';
 
 const problems = [
   'clip-path',
@@ -18,18 +18,16 @@ const problems = [
 
 const replacements = problems.map((p) => ({
   from: p,
-  to: camelize(p),
+  to: camelize(p, false, '-'),
   rx: new RegExp(p, 'mg'),
 }));
 
-export const svg2react = (svg: ISvg): IReact => {
+export const svg2react = (componentName: string, svg: ISvg): string => {
   const data = replacements.reduce((acc, curr) => {
     return acc.replace(curr.rx, curr.to);
   }, svg.content);
 
-  const componentName = `Svg${camelize(svg.name, true)}`;
-
-  const code = `export interface ${componentName}Props {
+  return `export interface ${componentName}Props {
   size?: string; // size of square container
   style?: React.CSSProperties; // not for height or width
 }
@@ -73,6 +71,4 @@ export const ${componentName}: React.FC<${componentName}Props> = ({ size = '24px
   );
 };
 `;
-
-  return { componentName, code };
 };

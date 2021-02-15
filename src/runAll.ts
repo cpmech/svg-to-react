@@ -1,18 +1,26 @@
 import glob from 'glob';
+import path from 'path';
 import { maybeWriteFile } from '@cpmech/basic-sys';
-import { filepath2name, genStorybook, genXSvgCollection, optimizeSvg, svg2react } from './lib';
+import { genStorybook, genXSvgCollection, optimizeSvg, svg2react } from './lib';
+import { camelize } from '@cpmech/basic';
+
+export const getCompName = (filepath: string): string => {
+  const filekey = path
+    .basename(filepath, path.extname(filepath))
+    .replace(/-/g, '_')
+    .replace(/\s/g, '_');
+  return `Svg${camelize(filekey, true)}`;
+};
 
 export const runAll = async (inputDir: string, outputDir: string, storybook = false) => {
   // generate and save components
   const filepaths = glob.sync(`${inputDir}/*.svg`);
-  const names = filepaths.map((fp) => filepath2name(fp));
-  const components = names.map(() => '');
+  const components = filepaths.map((filepath) => getCompName(filepath));
   for (let i = 0; i < filepaths.length; i++) {
-    console.log(`... processing ${names[i]}`);
+    console.log(`... processing ${components[i]}`);
     const svg = await optimizeSvg(filepaths[i]);
-    const react = svg2react(svg);
-    components[i] = react.componentName;
-    maybeWriteFile(true, `${outputDir}/${components[i]}.tsx`, () => react.code);
+    const code = svg2react(components[i], svg);
+    maybeWriteFile(true, `${outputDir}/${components[i]}.tsx`, () => code);
   }
 
   // generate and save XSvgCollection.tsx

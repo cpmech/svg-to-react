@@ -1,13 +1,6 @@
 import path from 'path';
 import SVGO from 'svgo';
-import {
-  extractViewBox,
-  filepath2name,
-  getSvgContent,
-  getSvgDims,
-  optimizeSvg,
-  viewBox2dims,
-} from '../svgTools';
+import { extractViewBox, getSvgContent, getSvgDims, optimizeSvg, viewBox2dims } from '../svgTools';
 
 const sample1 = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg
@@ -64,12 +57,6 @@ const sample2 = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 const sample2optContent =
   '<path d="M51.405 61.143l71.06 120.952" fill="none" stroke="#000" stroke-width=".265"/>';
 
-describe('filepath2name', () => {
-  it('should convert filepath to name', () => {
-    expect(filepath2name('./assets/houseThreeD.svg')).toBe('houseThreeD');
-  });
-});
-
 describe('extractViewBox', () => {
   it('should extract the viewbox of svg file', () => {
     expect(extractViewBox(sample1)).toBe('0 0 192 512');
@@ -109,12 +96,10 @@ describe('optimizeSvg', () => {
     const res1 = await optimizeSvg(path.join(__dirname, '../../../assets/sample1.svg'));
     const res2 = await optimizeSvg(path.join(__dirname, '../../../assets/sample2.svg'));
     expect(res1).toStrictEqual({
-      name: 'sample1',
       dims: { width: '192', height: '512' },
       content: sample1optContent,
     });
     expect(res2).toStrictEqual({
-      name: 'sample2',
       dims: { width: '210mm', height: '297mm' },
       content: sample2optContent,
     });

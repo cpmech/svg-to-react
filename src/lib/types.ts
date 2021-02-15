@@ -4,12 +4,6 @@ export interface IDims {
 }
 
 export interface ISvg {
-  name: string; // e.g houseThreeD
   dims: IDims;
   content: string;
-}
-
-export interface IReact {
-  componentName: string; // e.g HouseThreeD
-  code: string;
 }
