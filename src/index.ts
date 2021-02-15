@@ -8,7 +8,7 @@ const main = async () => {
       type: 'input',
       name: 'inputDir',
       message: 'What is the "input" directory?',
-      initial: './assets',
+      initial: '/tmp/svg-to-react/assets',
     },
     {
       type: 'input',
