@@ -24,7 +24,7 @@ export const runAll = async (inputDir: string, outputDir: string) => {
   maybeWriteFile(true, `${outputDir}/XSvgCollection.tsx`, () => appTsx);
 
   // generate and save index file
-  let indexTs = `export * from './XSvgCollection.ts';\n`;
+  let indexTs = `export * from './XSvgCollection';\n`;
   indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, indexTs);
   maybeWriteFile(true, `${outputDir}/index.ts`, () => indexTs);
 };
