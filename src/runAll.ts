@@ -4,18 +4,23 @@ import { maybeWriteFile } from '@cpmech/basic-sys';
 import { genStorybook, genXSvgCollection, optimizeSvg, svg2react } from './lib';
 import { camelize } from '@cpmech/basic';
 
-export const getCompName = (filepath: string): string => {
+export const getCompName = (prefix: string, filepath: string): string => {
   const filekey = path
     .basename(filepath, path.extname(filepath))
     .replace(/-/g, '_')
     .replace(/\s/g, '_');
-  return `Svg${camelize(filekey, true)}`;
+  return `${prefix}${camelize(filekey, true)}`;
 };
 
-export const runAll = async (inputDir: string, outputDir: string, storybook = false) => {
+export const runAll = async (
+  inputDir: string,
+  outputDir: string,
+  prefix: string,
+  storybook = false,
+) => {
   // generate and save components
   const filepaths = glob.sync(`${inputDir}/*.svg`);
-  const components = filepaths.map((filepath) => getCompName(filepath));
+  const components = filepaths.map((filepath) => getCompName(prefix, filepath));
   for (let i = 0; i < filepaths.length; i++) {
     console.log(`... processing ${components[i]}`);
     const svg = await optimizeSvg(filepaths[i]);

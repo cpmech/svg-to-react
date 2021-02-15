@@ -4,7 +4,7 @@ export const genStorybook = (components: string[]): string => {
   }
 
   let storyboard = `import { Meta, Story } from '@storybook/react/types-6-0';
-import { ${components[0]}Props } from '../${components[0]}';
+import { ${components[0]}Props } from './${components[0]}';
 `;
 
   storyboard += components.reduce((acc, curr) => `${acc}import { ${curr} } from '../';\n`, '');

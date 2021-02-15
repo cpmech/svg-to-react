@@ -17,15 +17,22 @@ const main = async () => {
       initial: '/tmp/svg-to-react/svgs',
     },
     {
+      type: 'input',
+      name: 'prefix',
+      message: 'What is the prefix for the components?',
+      initial: 'Svg',
+    },
+    {
       type: 'confirm',
       name: 'storybook',
       message: 'Generate Storybook?',
-      initial: false,
+      initial: true,
     },
   ]);
 
   const inputDir = (response as any).inputDir as string;
   const outputDir = (response as any).outputDir as string;
+  const prefix = (response as any).prefix as string;
   const storybook = (response as any).storybook as boolean;
 
   if (!fs.existsSync(inputDir)) {
@@ -58,7 +65,7 @@ const main = async () => {
   }
 
   console.log('🚀 Processing SVG files');
-  await runAll(inputDir, outputDir, storybook);
+  await runAll(inputDir, outputDir, prefix, storybook);
 
   console.log('😀 DONE');
 };
