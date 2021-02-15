@@ -3,7 +3,10 @@ export const genXCollection = (components: string[]): string => {
     return '';
   }
 
-  let app = components.reduce((acc, curr) => `${acc}import { ${curr} } from './${curr}';\n`, '');
+  let app = components.reduce(
+    (acc, curr) => `${acc}import { ${curr} } from './assets/${curr}';\n`,
+    '',
+  );
 
   app += `
 export const XCollection: React.FC = () => {

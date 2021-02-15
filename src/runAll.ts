@@ -25,7 +25,7 @@ export const runAll = async (
     console.log(`... processing ${components[i]}`);
     const svg = await optimizeSvg(filepaths[i]);
     const code = svg2react(components[i], svg);
-    maybeWriteFile(true, `${outputDir}/${components[i]}.tsx`, () => code);
+    maybeWriteFile(true, `${outputDir}/assets/${components[i]}.tsx`, () => code);
   }
 
   // generate and save XCollection.tsx
