@@ -1,6 +1,6 @@
 import glob from 'glob';
 import { maybeWriteFile } from '@cpmech/basic-sys';
-import { filepath2name, genApp, genStorybook, optimizeSvg, svg2react } from './lib';
+import { filepath2name, genSvgCollection, genStorybook, optimizeSvg, svg2react } from './lib';
 
 export const runAll = async (inputDir: string, outputDir: string) => {
   // generate and save components
@@ -20,8 +20,8 @@ export const runAll = async (inputDir: string, outputDir: string) => {
   const indexTs = components.reduce((acc, curr) => `${acc}export * from './${curr}';\n`, '');
   maybeWriteFile(true, `${outputDir}/index.ts`, () => indexTs);
 
-  // generate and save App.tsx
-  const appTsx = genApp(components);
+  // generate and save SvgCollection.tsx
+  const appTsx = genSvgCollection(components);
   maybeWriteFile(true, `${outputDir}/App.tsx`, () => appTsx);
 
   // generate and save AllSvg.stories.tsx
