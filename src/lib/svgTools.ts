@@ -7,7 +7,8 @@ import { IDims, ISvg } from './types';
 
 const svgo = new SVGO({});
 
-export const filepath2name = (filepath: string) => path.basename(filepath, path.extname(filepath));
+export const filepath2name = (filepath: string) =>
+  path.basename(filepath, path.extname(filepath)).replace('-', '_');
 
 export const extractViewBox = (svg: string): string => {
   const viewBoxRegex = /<svg .*?viewBox=["'](-?[\d.]+[, ]+-?[\d.]+[, ][\d.]+[, ][\d.]+)["']/;
