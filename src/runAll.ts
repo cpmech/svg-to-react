@@ -12,7 +12,7 @@ export const runAll = async (inputDir: string, outputDir: string) => {
     const svg = await optimizeSvg(filepaths[i]);
     const react = svg2react(svg);
     components[i] = react.componentName;
-    maybeWriteFile(true, `${outputDir}/svgs/${names[i]}.tsx`, () => react.code);
+    maybeWriteFile(true, `${outputDir}/svgs/${components[i]}.tsx`, () => react.code);
   }
 
   // generate and save AllSvg.stories.tsx
