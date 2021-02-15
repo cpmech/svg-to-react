@@ -9,6 +9,11 @@ const problems = [
   'stop-color',
   'stop-opacity',
   'stroke-width',
+  'stroke-linejoin',
+  'stroke-width',
+  'stroke-miterlimit',
+  'stroke-linecap',
+  'fill-rule',
 ];
 
 const replacements = problems.map((p) => ({
