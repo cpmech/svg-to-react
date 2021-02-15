@@ -8,3 +8,5 @@ curl https://ionicons.com/ionicons.designerpack.zip -o $TMPDIR/assets/ionicons.z
 cd $TMPDIR/assets
 unzip ionicons.zip
 rm ionicons.zip
+
+rm -f *sharp.svg

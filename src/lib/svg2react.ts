@@ -19,7 +19,7 @@ const problems = [
 const replacements = problems.map((p) => ({
   from: p,
   to: camelize(p),
-  rx: new RegExp(p, 'g'),
+  rx: new RegExp(p, 'mg'),
 }));
 
 export const svg2react = (svg: ISvg): IReact => {
