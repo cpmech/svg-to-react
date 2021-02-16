@@ -42,7 +42,7 @@ change package-dist.json
 echo
 echo "🔥 Compiling"
 rm -rf dist
-npm run rollup --config rollup.config.js
+npm run build
 
 # publish
 echo

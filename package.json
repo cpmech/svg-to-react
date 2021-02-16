@@ -1,6 +1,6 @@
 {
   "name": "@cpmech/svg-to-react",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "MIT",
   "scripts": {
     "tsnode": "ts-node -O '{\"module\":\"commonjs\",\"resolveJsonModule\":true}'",
@@ -11,6 +11,7 @@
     "eslint": "eslint",
     "lint": "eslint --ignore-path .eslintignore . --ext ts --ext tsx --quiet --fix",
     "postinstall": "bash ./zscripts/npm_postinstall.bash",
+    "build": "rm -rf dist && rollup --config rollup.config.js && chmod +x dist/index.js",
     "dist": "bash ./zscripts/npm_dist.bash"
   },
   "dependencies": {
