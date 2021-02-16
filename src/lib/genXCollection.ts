@@ -3,23 +3,24 @@ export const genXCollection = (components: string[], url: string): string => {
     return '';
   }
 
-  const allNames = "'" + components.join("', '") + "'";
+  const imports = components.reduce(
+    (acc, curr) => `${acc}import { ${curr} } from './assets/${curr}';\n`,
+    '',
+  );
 
-  return `import { Suspense, lazy } from 'react';
+  const details = components.reduce(
+    (acc, curr) => `${acc}  { name: '${curr}', icon: <${curr} size={size} /> },\n`,
+    '',
+  );
+
+  return `${imports}
 
 const size = '64px';
 const color = '#3184d1';
 
-const names = [${allNames}];
-
-const Icon: React.FC<{ name: string }> = ({ name }) => {
-  const Comp = lazy(() => import(\`./assets/\${name}\`).then((module) => ({ default: module[name] })));
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <Comp size={size} />
-    </Suspense>
-  );
-};
+const icons = [
+${details}
+];
 
 export const XCollection: React.FC = () => {
   return (
@@ -33,7 +34,7 @@ export const XCollection: React.FC = () => {
         gap: '8px',
       }}
     >
-      {names.map((name, i) => (
+      {icons.map(({ name, icon }, i) => (
         <a
           key={i}
           href={\`${url}/\${name}.tsx\`}
@@ -55,7 +56,7 @@ export const XCollection: React.FC = () => {
                 color,
               }}
             >
-              <Icon name={name} />
+              {icon}
             </div>
             <div
               style={{

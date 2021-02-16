@@ -20,13 +20,13 @@ const main = async () => {
       type: 'input',
       name: 'prefix',
       message: 'What is the prefix for the components?',
-      initial: 'Svg',
+      initial: 'Icon',
     },
     {
       type: 'input',
       name: 'url',
       message: 'What is the base url for XCollection.tsx?',
-      // initial: 'https://github.com/cpmech/ion-react-icons/blob/main/src/svgs/assets',
+      initial: 'https://github.com/cpmech/iricons/blob/main/src/svgs/assets',
     },
   ]);
 
