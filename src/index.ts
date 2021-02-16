@@ -20,20 +20,20 @@ const main = async () => {
       type: 'input',
       name: 'prefix',
       message: 'What is the prefix for the components?',
-      initial: 'Svg',
+      initial: 'Icon',
     },
     {
-      type: 'confirm',
-      name: 'storybook',
-      message: 'Generate Storybook?',
-      initial: true,
+      type: 'input',
+      name: 'url',
+      message: 'What is the base url for XCollection.tsx?',
+      // initial: 'https://github.com/cpmech/ion-react-icons/blob/main/src/svgs/assets',
     },
   ]);
 
   const inputDir = (response as any).inputDir as string;
   const outputDir = (response as any).outputDir as string;
   const prefix = (response as any).prefix as string;
-  const storybook = (response as any).storybook as boolean;
+  const url = (response as any).url as string;
 
   if (!fs.existsSync(inputDir)) {
     console.log('😟 Input directory does not exist');
@@ -65,7 +65,7 @@ const main = async () => {
   }
 
   console.log('🚀 Processing SVG files');
-  await runAll(inputDir, outputDir, prefix, storybook);
+  await runAll(inputDir, outputDir, prefix, url);
 
   console.log('😀 DONE');
 };

@@ -9,4 +9,3 @@ cd $TMPDIR/assets
 unzip ionicons.zip
 rm ionicons.zip
 
-rm -f *sharp.svg

@@ -1,7 +1,7 @@
 import glob from 'glob';
 import path from 'path';
 import { maybeWriteFile } from '@cpmech/basic-sys';
-import { genStorybook, genXCollection, optimizeSvg, svg2react } from './lib';
+import { genXCollection, optimizeSvg, svg2react } from './lib';
 import { camelize } from '@cpmech/basic';
 
 export const getCompName = (prefix: string, filepath: string): string => {
@@ -12,12 +12,7 @@ export const getCompName = (prefix: string, filepath: string): string => {
   return `${prefix}${camelize(filekey, true)}`;
 };
 
-export const runAll = async (
-  inputDir: string,
-  outputDir: string,
-  prefix: string,
-  storybook = false,
-) => {
+export const runAll = async (inputDir: string, outputDir: string, prefix: string, url: string) => {
   // generate and save components
   const filepaths = glob.sync(`${inputDir}/*.svg`);
   const components = filepaths.map((filepath) => getCompName(prefix, filepath));
@@ -29,12 +24,6 @@ export const runAll = async (
   }
 
   // generate and save XCollection.tsx
-  const appTsx = genXCollection(components);
+  const appTsx = genXCollection(components, url);
   maybeWriteFile(true, `${outputDir}/XCollection.tsx`, () => appTsx);
-
-  if (storybook) {
-    // generate and save AllSvg.stories.tsx
-    const allSvgStories = genStorybook(components);
-    maybeWriteFile(true, `${outputDir}/__stories__/AllSvg.stories.tsx`, () => allSvgStories);
-  }
 };
