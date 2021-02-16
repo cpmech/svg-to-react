@@ -9,6 +9,8 @@ Capabilities:
 3. The resulting code makes it easy to rescale and center the SVG file.
 4. The tool also generates an `XCollection.tsx` component to visualize all generated SVG.
 
+**NOTE**: The input files must be named with words separated by dashes `-` or underscores `_`.
+
 ## Installation
 
 ```bash
