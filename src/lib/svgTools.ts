@@ -1,6 +1,7 @@
 import fs from 'fs';
 import SVGO from 'svgo';
-import { Iany } from '@cpmech/basic';
+import { parse, stringify } from 'svgson';
+import { hasProp, Iany } from '@cpmech/basic';
 import { hasSameProp } from '@cpmech/js2ts';
 import { IDims, ISvg } from './types';
 
@@ -37,9 +38,29 @@ export const getSvgDims = (svgInfo: Iany, svgStr: string): IDims => {
 
 export const getSvgContent = (source: string) => source.slice(source.indexOf('>') + 1).slice(0, -6);
 
-export const optimizeSvg = async (filepath: string): Promise<ISvg> => {
+export const optimizeSvg = async (filepath: string, fillCurrentColor: boolean): Promise<ISvg> => {
   const data = fs.readFileSync(filepath, 'utf8');
-  const res = await svgo.optimize(data, { path: filepath });
+  const json = await parse(data);
+
+  let changed = false;
+  if (fillCurrentColor) {
+    for (let i = 0; i < json.children.length; i++) {
+      const child = json.children[i];
+      if (
+        child.name === 'path' ||
+        child.name === 'rect' ||
+        child.name === 'circle' ||
+        child.name === 'ellipse'
+      ) {
+        if (!hasProp(child.attributes, 'fill')) {
+          json.children[i].attributes['fill'] = 'currentColor';
+          changed = true;
+        }
+      }
+    }
+  }
+
+  const res = await svgo.optimize(changed ? stringify(json) : data, { path: filepath });
   const dims = getSvgDims(res.info, res.data);
   const content = getSvgContent(res.data);
   return { dims, content };

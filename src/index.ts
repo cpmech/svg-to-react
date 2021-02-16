@@ -20,13 +20,20 @@ const main = async () => {
       type: 'input',
       name: 'prefix',
       message: 'What is the prefix for the components?',
-      initial: 'Icon',
+      initial: 'Svg',
     },
     {
       type: 'input',
       name: 'url',
       message: 'What is the base url for XCollection.tsx?',
-      initial: 'https://github.com/cpmech/iricons/blob/main/src/svgs/assets',
+      // initial: 'https://github.com/cpmech/iricons/blob/main/src/svgs/assets',
+      initial: '',
+    },
+    {
+      type: 'confirm',
+      name: 'fillCurrentColor',
+      message: 'Add fill="currentColor" if missing?',
+      initial: true,
     },
   ]);
 
@@ -34,6 +41,7 @@ const main = async () => {
   const outputDir = (response as any).outputDir as string;
   const prefix = (response as any).prefix as string;
   const url = (response as any).url as string;
+  const fillCurrentColor = (response as any).fillCurrentColor as boolean;
 
   if (!fs.existsSync(inputDir)) {
     console.log('😟 Input directory does not exist');
@@ -65,7 +73,7 @@ const main = async () => {
   }
 
   console.log('🚀 Processing SVG files');
-  await runAll(inputDir, outputDir, prefix, url);
+  await runAll(inputDir, outputDir, prefix, url, fillCurrentColor);
 
   console.log('😀 DONE');
 };

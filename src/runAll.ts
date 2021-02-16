@@ -12,13 +12,19 @@ export const getCompName = (prefix: string, filepath: string): string => {
   return `${prefix}${camelize(filekey, true)}`;
 };
 
-export const runAll = async (inputDir: string, outputDir: string, prefix: string, url: string) => {
+export const runAll = async (
+  inputDir: string,
+  outputDir: string,
+  prefix: string,
+  url: string,
+  fillCurrentColor: boolean,
+) => {
   // generate and save components
   const filepaths = glob.sync(`${inputDir}/*.svg`);
   const components = filepaths.map((filepath) => getCompName(prefix, filepath));
   for (let i = 0; i < filepaths.length; i++) {
     console.log(`... processing ${components[i]}`);
-    const svg = await optimizeSvg(filepaths[i]);
+    const svg = await optimizeSvg(filepaths[i], fillCurrentColor);
     const code = svg2react(components[i], svg);
     maybeWriteFile(true, `${outputDir}/assets/${components[i]}.tsx`, () => code);
   }
