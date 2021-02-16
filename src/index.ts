@@ -20,7 +20,7 @@ const main = async () => {
       type: 'input',
       name: 'prefix',
       message: 'What is the prefix for the components?',
-      initial: 'Icon',
+      initial: 'Svg',
     },
     {
       type: 'input',
