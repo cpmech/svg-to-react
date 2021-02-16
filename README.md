@@ -1,5 +1,14 @@
 # Tool to convert SVG files to React components
 
+This tool converts SVG files into React TypeScript components.
+
+Capabilities:
+
+1. The tool uses SVGO to optimize the SVG, a lot.
+2. We wrap the svg into a CSS flex composition to make it easy to adjust the size of the SVG.
+3. The resulting code makes it easy to rescale and center the SVG file.
+4. The tool also generates an `XCollection.tsx` component to visualize all generated SVG.
+
 ## Installation
 
 ```bash
@@ -136,3 +145,7 @@ export const XCollection: React.FC = () => {
   );
 };
 ```
+
+## References
+
+This project is inspired by the article entitled "[Making SVG icon libraries](http://nicolasgallagher.com/making-svg-icon-libraries-for-react-apps)."
