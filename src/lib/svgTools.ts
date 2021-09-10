@@ -1,11 +1,9 @@
 import fs from 'fs';
-import SVGO from 'svgo';
+import { optimize } from 'svgo';
 import { parse, stringify } from 'svgson';
 import { hasProp, Iany } from '@cpmech/basic';
 import { hasSameProp } from '@cpmech/js2ts';
 import { IDims, ISvg } from './types';
-
-const svgo = new SVGO({});
 
 export const extractViewBox = (svg: string): string => {
   const viewBoxRegex = /<svg .*?viewBox=["'](-?[\d.]+[, ]+-?[\d.]+[, ][\d.]+[, ][\d.]+)["']/;
@@ -60,7 +58,7 @@ export const optimizeSvg = async (filepath: string, fillCurrentColor: boolean): 
     }
   }
 
-  const res = await svgo.optimize(changed ? stringify(json) : data, { path: filepath });
+  const res = optimize(changed ? stringify(json) : data, { path: filepath });
   const dims = getSvgDims(res.info, res.data);
   const content = getSvgContent(res.data);
   return { dims, content };
